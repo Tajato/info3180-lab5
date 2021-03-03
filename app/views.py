@@ -53,11 +53,11 @@ def login():
 
 
             # get user id, load into session
-            login_user(user,remember=remember_me)
+            login_user(user)
 
             # remember to flash a message to the user
-            flash('Logged in successfully!','success')
             return redirect(url_for("secure_page"))  # they should be redirected to a secure-page route instead
+            flash('Logged in successfully!','success')
     return render_template("login.html", form=form)
 
 
@@ -80,6 +80,16 @@ def send_text_file(file_name):
     """Send your static text file."""
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    # Logout the user and end the session
+    logout_user()
+    flash('You have been logged out!', 'danger')
+    return redirect(url_for('home'))
+    
 
 
 @app.after_request
